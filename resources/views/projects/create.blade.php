@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css">
-    <title>Document</title>
-</head>
-<body>
+@section('content')
 
-        <form method="POST" action="/projects" class="container" style="padding-top: 40px">
+        <form method="POST" action="/projects" >
             @csrf
-                <h1 class="heading is-1">Create a project</h1>
+                <h1>Create a project</h1>
             <div class="field">
                 <label class="lable" for="title">Title</label>
                 <div class="control">
@@ -27,10 +22,11 @@
             <div class="field">
                     <div class="control">
                         <button type="submit" class="button is-link">Create a project</button>
+                        <a class="button " href="/projects">Canceal</a>
                     </div>
                 </div>
         </form>
 
-</body>
 
-</html>
+
+@endsection

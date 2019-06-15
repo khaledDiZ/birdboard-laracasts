@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
+@section('content')
 
-    <title>Document</title>
-</head>
-
-<body>
-        <h1>pgojects</h1>
-
+    <div class="flex items-center mb-3" >
+        <a href="/projects/create">Create a project</a>
+    </div>
     <ul>
         @forelse ($projects as $project)
         <li>
@@ -21,6 +17,4 @@
 
         @endforelse
     </ul>
-</body>
-
-</html>
+    @endsection

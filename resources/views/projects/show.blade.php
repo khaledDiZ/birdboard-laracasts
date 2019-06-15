@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
+@section('content')
 
-    <title>Document</title>
-</head>
-<body>
+
         <h1>{{$project->title}}</h1>
 <div>{{$project->description}}</div>
-</body>
+<a href="/projects">Go Back</a>
 
-</html>
+@endsection
