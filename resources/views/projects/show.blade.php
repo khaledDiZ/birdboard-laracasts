@@ -17,7 +17,7 @@
                                 <h2 class="text-grey text-lg font-normal mb-3">Tasks</h2>
                                 {{-- Tasks --}}
                                 @foreach ($project->tasks as $task)
-                                        <div class="card">
+                                        <div class="card mb-3">
                                                 <form method="POST" action="{{$task->path()}}">
                                                         @method('PATCH')
                                                         @csrf
@@ -28,7 +28,7 @@
                                                 </form>
                                         </div>
                                 @endforeach
-                                <div class="card">
+                                <div class="card mb-3">
                                         <form method="POST" action="{{$project->path() . '/tasks'}}">
                                                 @csrf
                                                 <input name="body" class="w-full" placeholder="Add a new task...">
@@ -39,7 +39,17 @@
                         <div>
                                 <h2 class="text-grey text-lg font-normal mb-3">General notes</h2>
                                 {{-- General notes --}}
-                                <textarea style="min-height: 200px;" class="card w-full">Lorem Ipsum</textarea>
+                                <form method="POST" action="{{$project->path()}}">
+                                        @csrf
+                                        @method('PATCH')
+                                        <textarea placeholder="Leave a note here ..."
+                                        name="notes"
+                                         style="min-height: 200px;"
+                                         class="card w-full mb-4">
+                                         {{$project->notes}}
+                                        </textarea>
+                                        <button type="submit" class="button">Save</button>
+                                </form>
                         </div>
                     </div>
                     <div class="lg:w-1/4 px-3" >

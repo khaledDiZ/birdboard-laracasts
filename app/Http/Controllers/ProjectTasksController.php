@@ -8,10 +8,10 @@ use App\Task;
 
 class ProjectTasksController extends Controller
 {
-    public function store(Project $project)
+    public function store(Project $project, Task $task)
     {
 
-        abort_if(auth()->user()->isNot($project->owner), 403);
+        $this->authorize('update', $project);
 
         request()->validate(['body' => 'required']);
         $project->addTask(request('body'));
@@ -20,7 +20,8 @@ class ProjectTasksController extends Controller
 
     public function update(Project $project, Task $task)
     {
-        abort_if(auth()->user()->isNot($task->project->owner), 403);
+        $this->authorize('update', $task->project);
+
 
         request()->validate(['body' => 'required']);
 
