@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Feature;
 
+
 use App\Project;
 use App\Task;
 use Facades\Tests\Setup\ProjectFactory;
@@ -14,8 +15,7 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function a_user_can_create_a_project()
     {
-        $this->withoutExceptionHandling();
-        $this->actingAs(factory('App\User')->create());
+        $this->signIn();
         $this->get('/projects/create')->assertStatus(200);
         $attr = [
             'title' => $this->faker->sentence,
@@ -23,12 +23,8 @@ class ManageProjectsTest extends TestCase
             'notes' => 'General notes.'
         ];
         $response = $this->post('/projects',  $attr);
-
         $project = Project::where($attr)->first();
-
         $response->assertRedirect($project->path());
-
-        $this->assertDatabaseHas('projects', $attr);
         $this->get($project->path())
             ->assertSee($attr['title'])
             ->assertSee($attr['description'])
@@ -38,19 +34,16 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function a_user_can_update_a_project()
     {
-        $this->signIn();
-        $this->withoutExceptionHandling();
-        $project = factory('App\Project')->create(['owner_id' => auth()->id()]);
-        $this->patch($project->path(), [
-            'notes' => 'changed'
-        ])->assertRedirect($project->path());
-
-        $this->assertDatabaseHas('projects', ['notes' => 'changed']);
+        $project = ProjectFactory::create();
+        $this->actingAs($project->owner)
+            ->patch($project->path(), $attributes = ['notes' => 'Changed'])
+            ->assertRedirect($project->path());
+        $this->assertDatabaseHas('projects', $attributes);
     }
     /** @test */
     public function a_user_can_view_their_project()
     {
-        $project = factory('App\Project')->create();
+        $project = ProjectFactory::create();
         $this->actingAs($project->owner)
             ->get($project->path())
             ->assertSee($project->title)
@@ -69,7 +62,7 @@ class ManageProjectsTest extends TestCase
     {
         $this->be(factory('App\User')->create());
         $project = factory('App\Project')->create();
-        $this->patch($project->path(), [])->assertStatus(403);
+        $this->patch($project->path())->assertStatus(403);
     }
     /** @test */
     public function a_project_requires_a_title()
@@ -88,7 +81,6 @@ class ManageProjectsTest extends TestCase
     /** @test */
     public function guests_cannot_manage_projects()
     {
-        // $this->withoutExceptionHandling();
         $project = factory('App\Project')->create();
         $this->post('/projects',  $project->toArray())->assertRedirect('login');
         $this->get('/projects')->assertRedirect('login');
