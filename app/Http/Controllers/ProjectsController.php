@@ -30,6 +30,13 @@ class ProjectsController extends Controller
         return view('projects.create');
     }
 
+    // you can also use form objects
+    // public function update(UpdateProjectRequest $request)
+    // {
+
+    //     return redirect($request->save()->path());
+    // }
+
     public function update(Project $project)
     {
         $this->authorize('update', $project);
@@ -42,11 +49,12 @@ class ProjectsController extends Controller
         return view('projects.edit', compact('project'));
     }
 
-    protected function validateRequest(){
-       return $attr = request()->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'notes' => 'min:3'
+    protected function validateRequest()
+    {
+        return $attr = request()->validate([
+            'title' => 'sometimes|required',
+            'description' => 'sometimes|required',
+            'notes' => 'nullable'
         ]);
     }
 }
